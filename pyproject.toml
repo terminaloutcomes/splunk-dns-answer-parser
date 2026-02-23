@@ -1,0 +1,27 @@
+[project]
+name = "dns-answer-parser"
+version = "0.0.1"
+description = "Splunk search command to parse base64 DNS responses"
+readme = "README.md"
+requires-python = ">=3.9,<=3.14"
+dependencies = []
+
+[tool.uv]
+package = true
+
+[project.scripts]
+splunk_dns_answer_parser = "dns_answer_parser.bin.splunk_dns_answer_parser:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "ruff>=0.15.2",
+    "splunk-appinspect>=4.1.2",
+    "ty>=0.0.18 ; python_full_version >= '3.10'",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ty.src]
+include = ["dns_answer_parser", "tests"]

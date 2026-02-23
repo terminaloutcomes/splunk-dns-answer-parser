@@ -1,0 +1,52 @@
+[tasks.check]
+description = "Run all checks (lint, type check, tests)"
+depends = ["lint", "typecheck", "test"]
+
+[tasks.lint]
+description = "Run ruff linter"
+run = "uv run ruff check ."
+
+[tasks.typecheck]
+description = "Run ty type checker"
+run = "uv run ty check"
+
+[tasks.test]
+description = "Run pytest tests"
+run = "uv run pytest"
+
+
+[tasks.package]
+description = "Package Splunk app into dist/dns-answer-parser.tgz"
+run = """
+set -eu
+export COPYFILE_DISABLE=1
+APP_NAME='dns_answer_parser'
+OUT_DIR='dist'
+PKG_DIR="$OUT_DIR/$APP_NAME"
+PKG_FILE="$OUT_DIR/$APP_NAME.tgz"
+rm -rf "$PKG_DIR" "$PKG_FILE"
+mkdir -p "$PKG_DIR"
+cp -R dns_answer_parser/bin dns_answer_parser/default dns_answer_parser/metadata "$PKG_DIR"
+cp README.md "$PKG_DIR"
+find "$PKG_DIR" -type d -name '__pycache__' -prune -exec rm -rf {} +
+find "$PKG_DIR" -type d -name '*.egg-info' -prune -exec rm -rf {} +
+find "$PKG_DIR" -type f -name '*.pyc' -delete
+find "$PKG_DIR" -type f -name '*.pyo' -delete
+find "$PKG_DIR" -type f -name '._*' -delete
+tar --disable-copyfile -czf "$PKG_FILE" -C "$OUT_DIR" "$APP_NAME"
+echo "Created $PKG_FILE"
+"""
+
+[tasks.appinspect]
+description = "Run Splunk AppInspect against packaged app"
+depends = ["package"]
+run = """
+set -eu
+uv run splunk-appinspect inspect dist/dns_answer_parser.tgz
+"""
+
+
+[tasks.precert]
+description = "Run all pre-certification checks (lint, type check, tests, appinspect)"
+depends = ["check"]
+run = "mise appinspect --mode precert | rg -A100 'A default value of 25 for max-messages will be used.'"
