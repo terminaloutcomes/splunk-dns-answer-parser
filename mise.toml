@@ -52,7 +52,7 @@ find "$PKG_DIR" -type d -name '*.egg-info' -prune -exec rm -rf {} +
 find "$PKG_DIR" -type f -name '*.pyc' -delete
 find "$PKG_DIR" -type f -name '*.pyo' -delete
 find "$PKG_DIR" -type f -name '._*' -delete
-tar --disable-copyfile -czf "$PKG_FILE" -C "$OUT_DIR" "$APP_NAME"
+COPYFILE_DISABLE=1 tar -czf "$PKG_FILE" -C "$OUT_DIR" "$APP_NAME"
 echo "Created $PKG_FILE"
 """
 
