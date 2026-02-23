@@ -1,11 +1,11 @@
-from .command_logic import parse_event_record
+from .command_logic import InvocationCache
 from .parser import DNSRecord, ParsedDNSMessage, parse_dns_message_base64
 
 __all__ = [
     "DNSRecord",
     "ParsedDNSMessage",
     "parse_dns_message_base64",
-    "parse_event_record",
+    "InvocationCache",
 ]
 
 

@@ -14,10 +14,17 @@ if APP_PARENT not in sys.path:
 if LIB_PATH not in sys.path:
     sys.path.insert(0, LIB_PATH)
 
-from dns_answer_parser.bin.splunk_dns_answer_parser import parse_event_record  # noqa: E402
+from dns_answer_parser.bin.splunk_dns_answer_parser import (  # noqa: E402
+    InvocationCache,
+)
 
 try:
-    from splunklib.searchcommands import Configuration, Option, StreamingCommand, dispatch
+    from splunklib.searchcommands import (
+        Configuration,
+        Option,
+        StreamingCommand,
+        dispatch,
+    )
 except ImportError as exc:
     raise SystemExit(
         "splunklib.searchcommands is required in Splunk runtime. "
@@ -35,10 +42,13 @@ class DNSParseCommand(StreamingCommand):
                 yield record
             return
 
+        cache = InvocationCache()
         for record in records:
             try:
-                yield parse_event_record(record, str(self.field))
-            except Exception as exc:  # pragma: no cover - defensive for Splunk runtime safety
+                yield cache.parse_event_record(record, str(self.field))
+            except (
+                Exception
+            ) as exc:  # pragma: no cover - defensive for Splunk runtime safety
                 record["dnsparse_error"] = f"Unexpected dnsparse failure: {exc}"
                 yield record
 

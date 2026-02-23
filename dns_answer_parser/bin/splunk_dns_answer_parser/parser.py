@@ -47,7 +47,9 @@ def parse_dns_message_base64(encoded: str) -> ParsedDNSMessage:
         raise ValueError("DNS payload must be a non-empty base64 string")
     try:
         wire = base64.b64decode(encoded, validate=True)
-    except Exception as exc:  # pragma: no cover - exact exception varies by implementation
+    except (
+        Exception
+    ) as exc:  # pragma: no cover - exact exception varies by implementation
         raise ValueError("Invalid base64 DNS payload") from exc
     return _parse_dns_wire_message(wire)
 
@@ -146,14 +148,18 @@ def _decode_soa(wire: bytes, rdata_offset: int, rdlength: int) -> str:
     rname, offset = _read_name(wire, offset)
     if offset + 20 > end:
         return f"{mname} {rname}"
-    serial, refresh, retry, expire, minimum = struct.unpack("!IIIII", wire[offset : offset + 20])
+    serial, refresh, retry, expire, minimum = struct.unpack(
+        "!IIIII", wire[offset : offset + 20]
+    )
     return f"{mname} {rname} {serial} {refresh} {retry} {expire} {minimum}"
 
 
 def _decode_srv(wire: bytes, rdata_offset: int, rdlength: int) -> str:
     if rdlength < 7:
         return _hex(wire[rdata_offset : rdata_offset + rdlength])
-    priority, weight, port = struct.unpack("!HHH", wire[rdata_offset : rdata_offset + 6])
+    priority, weight, port = struct.unpack(
+        "!HHH", wire[rdata_offset : rdata_offset + 6]
+    )
     target, _ = _read_name(wire, rdata_offset + 6)
     return f"{priority} {weight} {port} {target}"
 
