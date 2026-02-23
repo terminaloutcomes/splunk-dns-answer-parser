@@ -1,4 +1,4 @@
-# splunk-dns-answer-parser
+# dns-answer-parser
 
 Splunk search command app providing `dnsparse`, which decodes a base64 DNS wire response and extracts parsed records/values.
 

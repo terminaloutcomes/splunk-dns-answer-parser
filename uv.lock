@@ -88,9 +88,24 @@ wheels = [
 ]
 
 [[package]]
+name = "deprecation"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5a/d3/8ae2869247df154b64c1884d7346d412fed0c49df84db635aab2d1c40e62/deprecation-2.1.0.tar.gz", hash = "sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff", size = 173788, upload-time = "2020-04-20T14:23:38.738Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/02/c3/253a89ee03fc9b9682f1541728eb66db7db22148cd94f89ab22528cd1e1b/deprecation-2.1.0-py2.py3-none-any.whl", hash = "sha256:a10811591210e1fb0e768a8c25517cabeabcba6f0bf96564f8ff45189f90b14a", size = 11178, upload-time = "2020-04-20T14:23:36.581Z" },
+]
+
+[[package]]
 name = "dns-answer-parser"
 version = "0.0.1"
 source = { editable = "." }
+dependencies = [
+    { name = "splunk-sdk" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -102,6 +117,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "splunk-sdk", specifier = ">=2.1.1" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -697,6 +713,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/91/39/8efe58ef9a9cfc607
 wheels = [
     { url = "https://files.pythonhosted.org/packages/38/b2/73f3a6b370f13bd571ace23393046220db342072d5a026a8bb187a5877f8/splunk_appinspect-4.1.2-py3-none-any.whl", hash = "sha256:0020ce9dd76f57afc0486411bcbeba06f5d1c752e962967bc9debdbf412836c5", size = 771236, upload-time = "2025-12-04T12:47:47.925Z" },
 ]
+
+[[package]]
+name = "splunk-sdk"
+version = "2.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "deprecation" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/16/c8/c54008fdb14c081fa4c60ed363b3dff9a2104ee77eb1717d717767486493/splunk-sdk-2.1.1.tar.gz", hash = "sha256:46300d52f09e0aed7e5962ce2ba08ef54421ffb3a538c6af6164dcbf9f075faa", size = 109168, upload-time = "2025-08-26T12:00:02.539Z" }
 
 [[package]]
 name = "structlog"

@@ -14,9 +14,28 @@ run = "uv run ty check"
 description = "Run pytest tests"
 run = "uv run pytest"
 
+[tasks.vendor]
+description = "Refresh vendored splunklib from uv environment"
+run = """
+set -eu
+uv run python - <<'PY'
+import pathlib
+import shutil
+import splunklib
+
+src = pathlib.Path(splunklib.__file__).resolve().parent
+dest = pathlib.Path("dns_answer_parser/lib/splunklib")
+dest.parent.mkdir(parents=True, exist_ok=True)
+if dest.exists():
+    shutil.rmtree(dest)
+shutil.copytree(src, dest)
+print(f"Vendored {src} -> {dest}")
+PY
+"""
 
 [tasks.package]
-description = "Package Splunk app into dist/dns-answer-parser.tgz"
+description = "Package Splunk app into dist/dns_answer_parser.tgz"
+depends = ["vendor"]
 run = """
 set -eu
 export COPYFILE_DISABLE=1
@@ -26,7 +45,7 @@ PKG_DIR="$OUT_DIR/$APP_NAME"
 PKG_FILE="$OUT_DIR/$APP_NAME.tgz"
 rm -rf "$PKG_DIR" "$PKG_FILE"
 mkdir -p "$PKG_DIR"
-cp -R dns_answer_parser/bin dns_answer_parser/default dns_answer_parser/metadata "$PKG_DIR"
+cp -R dns_answer_parser/bin dns_answer_parser/default dns_answer_parser/lib dns_answer_parser/metadata "$PKG_DIR"
 cp README.md "$PKG_DIR"
 find "$PKG_DIR" -type d -name '__pycache__' -prune -exec rm -rf {} +
 find "$PKG_DIR" -type d -name '*.egg-info' -prune -exec rm -rf {} +
